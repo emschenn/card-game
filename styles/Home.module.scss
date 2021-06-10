@@ -11,7 +11,8 @@
   .mainImg {
     margin-top: -5rem;
     img {
-      cursor: pointer;
+      // cursor: pointer;
+      cursor: url("../public/img/clickMe.png"), auto;
       width: 100%;
       @media (min-width: 800px) {
         width: 50%;
@@ -21,38 +22,44 @@
   .button {
     margin-top: 3rem;
     @include activateButton($width: 120px);
-  }
-  .start {
-    padding: 2rem 0;
-    display: flex;
-    justify-content: center;
-    .button {
-      @include activateButton($width: 120px);
-    }
-    @media (min-width: 800px) {
-      display: block;
-      order: 1;
-      padding: 30rem 0rem 0 15rem;
-      flex: 5;
+    span {
+      background-color: #fff;
     }
   }
-  .intro {
-    padding: 3rem 5rem;
-    line-height: 24px;
-    color: $dark-brown;
-    @media (min-width: 800px) {
-      order: 2;
-      padding: 10rem 10rem 0 5rem;
-      flex: 7;
-    }
-    .button {
-      cursor: pointer;
-      margin-top: 60px;
-      &:hover {
-        font-weight: bolder;
-      }
-    }
-  }
+  // .start {
+  //   padding: 2rem 0;
+  //   display: flex;
+  //   justify-content: center;
+  //   .button {
+  //     @include activateButton($width: 120px);
+  //     span {
+  //       background-color: #fff;
+  //     }
+  //   }
+  //   @media (min-width: 800px) {
+  //     display: block;
+  //     order: 1;
+  //     padding: 30rem 0rem 0 15rem;
+  //     flex: 5;
+  //   }
+  // }
+  // .intro {
+  //   padding: 3rem 5rem;
+  //   line-height: 24px;
+  //   color: $dark-brown;
+  //   @media (min-width: 800px) {
+  //     order: 2;
+  //     padding: 10rem 10rem 0 5rem;
+  //     flex: 7;
+  //   }
+  //   .button {
+  //     cursor: pointer;
+  //     margin-top: 60px;
+  //     &:hover {
+  //       font-weight: bolder;
+  //     }
+  //   }
+  // }
 }
 
 .animationBox {

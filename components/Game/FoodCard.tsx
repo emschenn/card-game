@@ -5,32 +5,41 @@ import { motion } from "framer-motion";
 // context
 import { FirebaseContext, GameContext } from "../../src/context";
 
+interface ISelectCard {
+  card: ICard;
+  index: number;
+}
 interface IProps {
   index: number;
   card: ICard;
-  isSelect: boolean;
+  selectCard: ISelectCard;
   setSelectCard: Function;
   clickable: boolean;
   styles: CSSModule;
+  onOkClick: () => void;
 }
 
 const FoodCard = ({
   index,
   card,
-  isSelect,
+  selectCard,
   setSelectCard,
   clickable,
   styles,
+  onOkClick,
 }: IProps) => {
-  const db = useContext(FirebaseContext);
-  const { me } = useContext(GameContext);
   const { point, img, name } = card;
 
   const onCardClick = (e) => {
+    e.stopPropagation();
     if (clickable) {
-      e.preventDefault();
       setSelectCard({ card, index });
     }
+  };
+
+  const onDoubleClick = (e) => {
+    e.stopPropagation();
+    onOkClick();
   };
 
   return (
@@ -40,9 +49,16 @@ const FoodCard = ({
         onClick={onCardClick}
         whileHover={clickable ? { scale: 1.1 } : {}}
       >
-        <motion.img src={img} alt={name} onClick={onCardClick} />
+        <img src={img} alt={name} onClick={onCardClick} />
+        {index === selectCard?.index && (
+          <div className={styles.cardOverlay} onClick={onDoubleClick}>
+            <div className={styles.text}>
+              確定這張嗎
+              <span>再按一次送出</span>
+            </div>
+          </div>
+        )}
       </motion.div>
-      {isSelect && <div>this</div>}
     </div>
   );
 };

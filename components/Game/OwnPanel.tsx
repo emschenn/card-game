@@ -67,11 +67,11 @@ const OwnPanel = ({ id, gameState, setMsg, styles }: IProps) => {
       selectCard?.index
     );
     db.ref().update(updates);
-    setSelectCard(null);
     setEnableCardClick(false);
   };
 
   const handleOkClick = () => {
+    setSelectCard(null);
     if (step === 1) {
       setMsg("等待大家完成動作");
       withdrawOwnCardAndAddToCards("passCards", passCards);
@@ -89,14 +89,15 @@ const OwnPanel = ({ id, gameState, setMsg, styles }: IProps) => {
             key={index}
             index={index}
             card={FOOD_CARD[num]}
-            isSelect={index === selectCard?.index}
+            selectCard={selectCard}
             setSelectCard={setSelectCard}
             clickable={enableCardClick}
             styles={styles}
+            onOkClick={handleOkClick}
           />
         ))}
       </div>
-      {selectCard?.card && <OkButton onOkClick={handleOkClick} text={"確定"} />}
+      {/* {selectCard?.card && <OkButton onOkClick={handleOkClick} text={"確定"} />} */}
       <CampCard camp={me.camp} styles={styles} />
     </>
   );

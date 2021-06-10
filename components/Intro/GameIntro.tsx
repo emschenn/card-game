@@ -8,7 +8,7 @@ const GameIntro = ({ styles }: IProps) => {
   return (
     <div className={styles.gameIntro}>
       <h1>
-        每個人的腸胃，都存在著可以幫助人們大便的淸道夫以及阻礙人們排便的搗蛋鬼。
+        每個人的腸胃，都存在著可以幫助人們大便的淸道夫以及阻礙人們排便的搗蛋鬼
       </h1>
       <div className={styles.container}>
         <img src="/img/box.jpeg" />

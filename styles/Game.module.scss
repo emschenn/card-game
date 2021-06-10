@@ -16,6 +16,7 @@
       flex-direction: column;
       align-items: center;
       .avatar {
+        cursor: pointer;
         height: 60px;
         width: 60px;
         border-radius: 60px;
@@ -45,6 +46,39 @@
     .cardContainer {
       .foodCard {
         cursor: pointer;
+        position: relative;
+
+        .cardOverlay {
+          transform: rotate(45deg);
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 100%;
+          width: 100%;
+          opacity: 0.4;
+          transition: 0.5s ease;
+          background-color: #000;
+          .text {
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            opacity: 1;
+            -webkit-transform: translate(-50%, -50%) rotate(-45deg);
+            -ms-transform: translate(-50%, -50%) rotate(-45deg);
+            transform: translate(-50%, -50%) rotate(-45deg);
+            text-align: center;
+            span {
+              display: block;
+              padding-top: 1rem;
+              font-size: 0.8rem;
+            }
+          }
+        }
         img {
           transform: rotate(45deg);
           width: 200px;
