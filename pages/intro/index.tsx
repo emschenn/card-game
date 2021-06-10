@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "../../styles/Intro.module.scss";
 
 // components
 import Props from "../../components/Intro/Props";
@@ -8,9 +9,9 @@ interface IProps {}
 
 const Intro = (props: IProps) => {
   return (
-    <div className="intro">
-      <Props />
-      <Rule />
+    <div className={styles.intro}>
+      <Props styles={styles} />
+      <Rule styles={styles} />
     </div>
   );
 };

@@ -9,6 +9,7 @@ interface IProps {
   setSelectPlayer: Function;
   clickable: boolean;
   isPlaceHolder: boolean;
+  styles: CSSModule;
 }
 
 const Player = ({
@@ -17,6 +18,7 @@ const Player = ({
   setSelectPlayer,
   isPlaceHolder,
   clickable,
+  styles,
 }: IProps) => {
   const { name, isAlive } = player;
 
@@ -30,14 +32,14 @@ const Player = ({
 
   return (
     <div
-      className="player-container"
+      className={styles.playerContainer}
       style={{
         opacity: isPlaceHolder || !player.isAlive ? 0.5 : 1,
         scale: isSelect ? 1.1 : 1,
       }}
     >
       <motion.div
-        className="avatar"
+        className={styles.avatar}
         onClick={onPlayerClick}
         whileHover={{
           scale: isPlaceHolder || !isAlive || !clickable ? 1 : 1.1,
@@ -45,7 +47,7 @@ const Player = ({
       >
         {name[0]}
       </motion.div>
-      <div className="name">{name}</div>
+      <div className={styles.name}>{name}</div>
     </div>
   );
 };

@@ -27,7 +27,7 @@ export const FOOD_CARD = [
     id: 4,
     name: "巨峰葡萄",
     point: 1,
-    img: "/img/foodCard/巨峰葡萄.png",
+    img: "/img/foodCard/葡萄.png",
   },
   {
     id: 5,
@@ -179,7 +179,7 @@ export const FOOD_CARD = [
     id: 31,
     name: "菠蘿麵包",
     point: -2,
-    img: "/img/foodCard/菠羅麵包.jpg",
+    img: "/img/foodCard/波羅麵包.jpg",
   },
   {
     id: 32,
@@ -228,5 +228,41 @@ export const FOOD_CARD = [
     name: "85%黑巧克力",
     point: 2,
     img: "/img/foodCard/黑巧克力.jpg",
+  },
+];
+
+export const CAMP_CARD = [
+  { id: 0, name: "清道夫", img: "/img/campCard/good.png" },
+  { id: 1, name: "搗蛋鬼", img: "/img/campCard/bad.png" },
+];
+
+export const EVENT_CARD = [
+  {
+    id: 0,
+    name: "胃食道逆流",
+    power: "整付牌往右傳",
+    desc: "攝取過量精緻碳水化合物，容易讓胃內的幽門螺旋桿菌滋生，發酵產生的大量氣體會對小腸產生過大的壓力，導致胃食道逆流",
+    img: "/img/eventCard/right.png",
+  },
+  {
+    id: 1,
+    name: "姨媽到",
+    power: "所有人照順序捨棄並重抽一張手牌（從抽到者開始）",
+    desc: "月經時期，體內的子宮內膜細胞會分泌前列腺素刺激腸道，讓排便更為順暢",
+    img: "/img/eventCard/period.png",
+  },
+  {
+    id: 2,
+    name: "睡眠不足",
+    power: "抽到者指定兩人交換陣營卡",
+    desc: "睡眠節律遭打亂、長期熬夜睡眠時間被破壞，也容易使腸道菌種和菌量因此失調，直接影響腸胃正常運作",
+    img: "/img/eventCard/sleep.png",
+  },
+  {
+    id: 3,
+    name: "照胃鏡",
+    power: "抽到者任選一人看手牌",
+    desc: "藉由胃鏡檢查可觀察到食道、胃、十二指腸的病變（發炎、潰瘍、糜爛、出血、腫瘤）",
+    img: "/img/eventCard/see.png",
   },
 ];

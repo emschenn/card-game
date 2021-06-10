@@ -9,11 +9,12 @@ import { IPlayer, IGameConfig } from "../../interfaces/gameConfig";
 
 // components
 import Player from "./Player";
-import OkButton from "./OkButton";
+import OkButton from "../ui/OkButton";
 
 interface IProps {
   id: string;
   gameState: IGameConfig;
+  styles: CSSModule;
 }
 
 interface IPlayerArray {
@@ -21,7 +22,7 @@ interface IPlayerArray {
   IPlayer;
 }
 
-const PlayersPanel = ({ id, gameState }: IProps) => {
+const PlayersPanel = ({ id, gameState, styles }: IProps) => {
   const [enablePlayerClick, setEnablePlayerClick] = useState(true);
   const [selectPlayer, setSelectPlayer] = useState<IPlayerArray | null>();
   const { step, players, playersCount, votePlayers } = gameState;
@@ -39,7 +40,7 @@ const PlayersPanel = ({ id, gameState }: IProps) => {
     } else {
       setEnablePlayerClick(false);
     }
-  }, [step]);
+  }, [step, votePlayers]);
 
   const handleOkClick = (e) => {
     e.preventDefault;
@@ -71,7 +72,7 @@ const PlayersPanel = ({ id, gameState }: IProps) => {
 
   return (
     <>
-      <div className="players-container">
+      <div className={styles.playersContainer}>
         {playerArray.map((player) => (
           <Player
             player={player}
@@ -80,6 +81,7 @@ const PlayersPanel = ({ id, gameState }: IProps) => {
             isSelect={true}
             isPlaceHolder={false}
             setSelectPlayer={setSelectPlayer}
+            styles={styles}
           />
         ))}
         {playersPlaceholder.map((player, i) => (
@@ -90,6 +92,7 @@ const PlayersPanel = ({ id, gameState }: IProps) => {
             isSelect={false}
             isPlaceHolder={true}
             setSelectPlayer={setSelectPlayer}
+            styles={styles}
           />
         ))}
       </div>

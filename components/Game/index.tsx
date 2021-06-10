@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import styled from "styled-components";
+import { AnimatePresence, motion } from "framer-motion";
 
 // context
 import { FirebaseContext, GameContext } from "../../src/context";
@@ -13,6 +13,7 @@ import OwnPanel from "./OwnPanel";
 import PlayersPanel from "./PlayersPanel";
 import AnimateModal from "../ui/AnimateModal";
 import GameIdBox from "./GameIdBox";
+import Modal from "../Intro/Modal";
 
 // utils
 import {
@@ -25,32 +26,26 @@ import {
   decideWhoWins,
 } from "../../utils/gameUtils";
 
-const Poops = styled.div`
-  margin: 10px;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  line-height: 50px;
-  color: #fff;
-  background-color: brown;
-`;
-
 interface IProps {
   id: string;
   gameState: IGameConfig;
   setGameState: Function;
+  styles: CSSModule;
 }
 
-const Game = ({ id, gameState, setGameState }: IProps) => {
+const Game = ({ id, gameState, setGameState, styles }: IProps) => {
   const router = useRouter();
   const db = useContext(FirebaseContext);
   const { me, setMe } = useContext(GameContext);
   const [msg, setMsg] = useState("");
   const [modalConfig, setModalConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [openIntroModal, setOpenIntroModal] = useState(false);
   const [showDrawCardButton, setShowDrawCardButton] = useState(false);
 
   const openModal = (props) => {
+    console.log("show modal!");
+    console.log(props);
     setModalConfig(props);
     setShowModal(true);
   };
@@ -64,82 +59,99 @@ const Game = ({ id, gameState, setGameState }: IProps) => {
       const newState = snapshot.val();
       setGameState(newState);
       const updates = {};
-      if (newState.step === 0) {
-        if (!newState.isStart) {
+      const {
+        step,
+        isStart,
+        players,
+        pooPoint,
+        playersCount,
+        round,
+        passCards,
+        playCards,
+        votePlayers,
+      } = newState;
+      const alivePlayers = getAlivePlayersArray(players);
+      if (step === 0) {
+        if (!isStart) {
           setMsg("等待大家加入...");
-          if (Object.keys(newState.players).length === newState.playersCount) {
+          // if everybody join
+          if (Object.keys(players).length === playersCount) {
             openModal({ title: "遊戲開始💩" });
-            updates[`games/${id}/step`] = 1;
             setMsg("選擇要傳給隔壁的人的牌");
-            updates[`games/${id}/isStart`] = true;
-            db.ref().update(updates);
+            // only the last person do the global update
+            if (Object.keys(players)[playersCount - 1] === me.id) {
+              updates[`games/${id}/step`] = 1;
+              updates[`games/${id}/isStart`] = true;
+              db.ref().update(updates);
+            }
           }
         } else {
-          if (checkIsAllAlivePlayersThreeCards(newState.players)) {
+          // if everybody is ready for the next round
+          if (checkIsAllAlivePlayersThreeCards(players)) {
             openModal({
               title: "遊戲開始💩",
-              subtitle: `第${newState.round}回合`,
+              subtitle: `第${round}回合`,
             });
-            updates[`games/${id}/step`] = 1;
             setMsg("選擇要傳給隔壁的人的牌");
+            updates[`games/${id}/step`] = 1;
             db.ref().update(updates);
           }
         }
-      } else if (newState.step === 1) {
+      } else if (step === 1) {
         if (
-          !newState.passCards.isEmpty &&
-          Object.keys(newState.passCards).length ===
-            getAlivePlayersArray(newState.players).length
+          !passCards.isEmpty &&
+          Object.keys(passCards).length === alivePlayers.length
         ) {
-          const { players, passCards } = newState;
-          updates[`games/${id}/step`] = 2;
           setMsg("選擇要出的牌");
+          // only the last person do the global update, other update own cards
+          //Object.keys(passCards)[alivePlayers.length - 1] === me.id
           if (me.isAlive) {
             updates[`games/${id}/players/${me.id}/handCards`] =
               receivePassCardArray(me.id, players, passCards);
+            updates[`games/${id}/step`] = 2;
+            db.ref().update(updates);
           }
-          console.log(updates);
-          db.ref().update(updates);
         }
-      } else if (newState.step === 2) {
+      } else if (step === 2) {
         if (
-          !newState.playCards.isEmpty &&
-          Object.keys(newState.playCards).length ===
-            getAlivePlayersArray(newState.players).length
+          !playCards.isEmpty &&
+          Object.keys(playCards).length === alivePlayers.length
         ) {
-          const { playCards, pooPoint } = newState;
           const newPoint = calculateTotalPooPoint(playCards, pooPoint);
-          updates[`games/${id}/pooPoint`] = newPoint;
-          updates[`games/${id}/step`] = 3;
-          if (newState.round !== 3) {
-            setMsg("選擇要淘汰的人");
-          } else {
-          }
           openModal({
             title: `更新💩指數 ${newPoint}`,
-            subtitle: `第${newState.round}回合`,
+            subtitle: `目前是第${round}回合`,
           });
-          db.ref().update(updates);
+          if (round !== 3) {
+            setMsg("選擇要淘汰的人");
+          } else {
+            setMsg("");
+          }
+          // only the last person do the global update
+          if (Object.keys(playCards)[alivePlayers.length - 1] === me.id) {
+            updates[`games/${id}/pooPoint`] = newPoint;
+            updates[`games/${id}/step`] = 3;
+            db.ref().update(updates);
+          }
         }
-      } else if (newState.step === 3) {
-        if (newState.round === 3) {
-          const { pooPoint, playerCount } = newState;
-          const winCamp = decideWhoWins(pooPoint, playerCount);
+      } else if (step === 3) {
+        if (round === 3) {
+          const winCamp = decideWhoWins(pooPoint, playersCount);
           showResult(me.camp, winCamp);
           return;
         }
-
         if (
-          !newState.votePlayers.isEmpty &&
-          Object.keys(newState.votePlayers).length ===
-            getAlivePlayersArray(newState.players).length
+          !votePlayers.isEmpty &&
+          Object.keys(votePlayers).length === alivePlayers.length
         ) {
-          const { votePlayers, players } = newState;
           const diePlayer = decideDiePlayer(votePlayers);
           if (!diePlayer) {
             openModal({ title: "平手，請大家重投" });
-            updates[`games/${id}/votePlayers`] = { isEmpty: true };
-            db.ref().update(updates);
+            // only the last person do the global update
+            if (Object.keys(votePlayers)[alivePlayers.length - 1] === me.id) {
+              updates[`games/${id}/votePlayers`] = { isEmpty: true };
+              db.ref().update(updates);
+            }
             return;
           }
           if (me.id === diePlayer) {
@@ -157,25 +169,23 @@ const Game = ({ id, gameState, setGameState }: IProps) => {
             });
             setShowDrawCardButton(true);
           }
-          updates[`games/${id}/players/${diePlayer}/isAlive`] = false;
-          updates[`games/${id}/round`] = newState.round + 1;
-          updates[`games/${id}/step`] = 0;
-          updates[`games/${id}/votePlayers`] = { isEmpty: true };
-          updates[`games/${id}/passCards`] = { isEmpty: true };
-          updates[`games/${id}/playCards`] = { isEmpty: true };
-          db.ref().update(updates);
+          // only the last person do the global update
+          if (Object.keys(votePlayers)[alivePlayers.length - 1] === me.id) {
+            updates[`games/${id}/players/${diePlayer}/isAlive`] = false;
+            updates[`games/${id}/round`] = round + 1;
+            updates[`games/${id}/step`] = 0;
+            updates[`games/${id}/votePlayers`] = { isEmpty: true };
+            updates[`games/${id}/passCards`] = { isEmpty: true };
+            updates[`games/${id}/playCards`] = { isEmpty: true };
+            db.ref().update(updates);
+          }
           setMsg("");
         }
       }
     });
 
     return () => ref.off();
-  }, []);
-
-  console.log("me");
-  console.log(me);
-  console.log("gameState");
-  console.log(gameState);
+  }, [me]);
 
   const drawCard = () => {
     const myCards = gameState.players[me.id].handCards;
@@ -202,27 +212,46 @@ const Game = ({ id, gameState, setGameState }: IProps) => {
   const restartTheGame = () => {};
 
   return (
-    <div className="game">
-      <PlayersPanel id={id} gameState={gameState} />
-      <AnimateModal
-        config={modalConfig}
-        show={showModal}
-        setShow={setShowModal}
-      />
-      <div className="msg">{msg} </div>
+    <div className={styles.game}>
+      <PlayersPanel id={id} gameState={gameState} styles={styles} />
+      <AnimatePresence>
+        {showModal && (
+          <AnimateModal
+            config={modalConfig}
+            show={showModal}
+            setShow={setShowModal}
+          />
+        )}
+      </AnimatePresence>
+
+      <div className={styles.msg}>{msg} </div>
       {gameState.isStart ? (
         <>
-          <div className="poo-point">💩: {gameState.pooPoint}</div>
-          <OwnPanel id={id} gameState={gameState} setMsg={setMsg} />
+          <div className={styles.pooPoint}> 💩: {gameState.pooPoint}</div>
+          <OwnPanel
+            id={id}
+            gameState={gameState}
+            setMsg={setMsg}
+            styles={styles}
+          />
           {showDrawCardButton && (
-            <div className=" button draw-card" onClick={drawCard}>
+            <div className={styles.drawCard} onClick={drawCard}>
               抽牌
             </div>
           )}
         </>
       ) : (
-        <GameIdBox id={id} />
+        <GameIdBox id={id} styles={styles} />
       )}
+      <div
+        className={styles.openIntro}
+        onClick={() => {
+          setOpenIntroModal(true);
+        }}
+      ></div>
+      <AnimatePresence>
+        {openIntroModal && <Modal setOpenIntroModal={setOpenIntroModal} />}
+      </AnimatePresence>
     </div>
   );
 };

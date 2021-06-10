@@ -1,12 +1,13 @@
 import React from "react";
 
-interface IProps {}
-
-const Rule = (props: IProps) => {
+interface IProps {
+  styles: CSSModule;
+}
+const Rule = ({ styles }: IProps) => {
   return (
-    <div className="rule">
-      <div className="prepare">
-        <div className="title">前置準備</div>
+    <div className={styles.rule}>
+      <div className={styles.prepare}>
+        <div className={styles.title}>前置準備</div>
         <ul>
           <li>
             每一個玩家分別抽取一張陣營卡，依照不同遊戲人數５－６人遊戲中，每一回合當中會有３張淸道夫、２張搗蛋鬼，其餘人數請參照下方對照表
@@ -17,12 +18,12 @@ const Rule = (props: IProps) => {
           <li>決定玩家們的出牌順位後，以順時針的方向出牌</li>
         </ul>
       </div>
-      <div className="win-condition">
-        <div className="title">獲勝條件</div>
+      <div className={styles.winCondition}>
+        <div className={styles.title}>獲勝條件</div>
         淸道夫陣營拉出大便 or 搗蛋鬼陣營阻止拉出大便（參考表）
       </div>
-      <div className="action">
-        <div className="title">回合動作</div>
+      <div className={styles.action}>
+        <div className={styles.title}>回合動作</div>
         <ul>
           <li>
             傳牌：每個玩家將手上的任意一張牌傳給左手邊的玩家，並且傳遞後抽取一張卡牌，使手中的卡牌始終維持３張。

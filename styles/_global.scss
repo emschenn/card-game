@@ -1,0 +1,37 @@
+@font-face {
+  font-family: "GenSen"; /*a name to be used later*/
+  src: url("../font/GenSenRoundedTW-B.ttf");
+  src: url("../font/GenSenRoundedTW-EL.ttf");
+  src: url("../font/GenSenRoundedTW-H.ttf");
+  src: url("../font/GenSenRoundedTW-L.ttf");
+  src: url("../font/GenSenRoundedTW-M.ttf");
+  src: url("../font/GenSenRoundedTW-R.ttf");
+}
+
+$light-brown: #dad7cc;
+$brown: #8b8275;
+$dark-brown: #63493b;
+$red-brown: #a83f24;
+
+@mixin activateButton($width: 120px) {
+  cursor: pointer;
+  color: $dark-brown;
+  width: $width;
+  background: $dark-brown;
+  font-weight: 700;
+  padding: 0;
+  border-radius: 5px;
+  span {
+    text-align: center;
+    display: block;
+    background: $light-brown;
+    padding: 0.8rem 1rem;
+    border: 1px solid $dark-brown;
+    border-radius: 5px;
+    transform: translate3d(-4px, -4px, 0);
+    transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+  &:hover span {
+    transform: translate3d(-8px, -8px, 0);
+  }
+}

@@ -11,6 +11,7 @@ interface IProps {
   isSelect: boolean;
   setSelectCard: Function;
   clickable: boolean;
+  styles: CSSModule;
 }
 
 const FoodCard = ({
@@ -19,6 +20,7 @@ const FoodCard = ({
   isSelect,
   setSelectCard,
   clickable,
+  styles,
 }: IProps) => {
   const db = useContext(FirebaseContext);
   const { me } = useContext(GameContext);
@@ -32,20 +34,13 @@ const FoodCard = ({
   };
 
   return (
-    <div className="card-container">
+    <div className={styles.cardContainer}>
       <motion.div
-        className="card"
+        className={styles.foodCard}
         onClick={onCardClick}
         whileHover={clickable ? { scale: 1.1 } : {}}
       >
-        {/* {point} */}
-        <motion.img
-          src={img}
-          alt={name}
-          onClick={onCardClick}
-          // initial={{ "--rotate": "0deg" } as any}
-          // whileHover={clickable ? { rotate: 45, scale: 1.1 } : {}}
-        />
+        <motion.img src={img} alt={name} onClick={onCardClick} />
       </motion.div>
       {isSelect && <div>this</div>}
     </div>

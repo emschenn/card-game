@@ -28,3 +28,11 @@ export interface ICard {
   img: string;
   point: number;
 }
+
+export interface ICardData {
+  id: number;
+  name: string;
+  img: string;
+  point?: number;
+  desc?: string;
+}

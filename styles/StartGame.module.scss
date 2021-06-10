@@ -1,0 +1,101 @@
+@import "global";
+
+.start {
+  height: 100vh;
+  width: 100%;
+  background-color: $light-brown;
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: $dark-brown;
+    .title {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .desc {
+      line-height: 1.2rem;
+      margin: 1rem 2rem;
+    }
+    input {
+      color: $dark-brown;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      &.error {
+        border: 1px solid $red-brown;
+      }
+    }
+    .errorMsg {
+      font-size: 0.8rem;
+      color: $red-brown;
+      margin-bottom: 0.3rem;
+    }
+    .button {
+      margin: 2rem 0 0 0;
+      font-weight: 600;
+      @include activateButton($width: 120px);
+      background-color: $dark-brown;
+      span {
+        background-color: transparent;
+      }
+    }
+  }
+  .setup {
+    margin: 4rem 2.5rem 2rem 2.5rem;
+    padding: 2rem 0;
+    background-color: #fff;
+    border-radius: 30px;
+    -webkit-box-shadow: 5px 5px 25px 0px rgba(76, 76, 76, 0.3);
+    box-shadow: 5px 5px 25px 0px rgba(76, 76, 76, 0.3);
+    .button {
+      span {
+        border-color: #fff;
+        color: #fff;
+      }
+    }
+    .count {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 0;
+      option {
+        cursor: pointer;
+        width: 2rem;
+        height: 2rem;
+        line-height: 2rem;
+        text-align: center;
+        margin: 0 0.5rem;
+        border-radius: 50%;
+        background-color: $light-brown;
+        color: #fff;
+        &:hover {
+          background-color: $brown;
+        }
+      }
+      .selectItem {
+        background-color: $brown;
+      }
+    }
+  }
+  .join {
+    margin: 0 2.5rem;
+    padding: 2rem 0;
+    .button {
+      background-color: $light-brown;
+    }
+  }
+  @media (min-width: 800px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .form {
+      max-height: 380px;
+      max-width: 300px;
+      margin-top: 0;
+    }
+    .join-game {
+      margin: -1rem 0 0 10rem;
+    }
+  }
+}

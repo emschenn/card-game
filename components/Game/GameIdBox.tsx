@@ -2,9 +2,10 @@ import React from "react";
 
 interface IProps {
   id: string;
+  styles: CSSModule;
 }
 
-const GameIdBox = ({ id }: IProps) => {
+const GameIdBox = ({ id, styles }: IProps) => {
   const copyText = () => {
     const range = document.createRange();
     range.selectNode(document.getElementById("gameId"));
@@ -22,11 +23,11 @@ const GameIdBox = ({ id }: IProps) => {
   };
 
   return (
-    <div className="share-id">
+    <div className={styles.shareId}>
       <p>複製以下邀請碼，傳送給朋友</p>
-      <div className="game-id">
+      <div className={styles.gameId}>
         <p id="gameId">{id}</p>
-        <div className="tooltip">
+        <div className={styles.tooltip}>
           <img
             src="/img/copy.svg"
             alt="copy"

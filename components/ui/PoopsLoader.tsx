@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import styles from "../../styles/CommonUi.module.scss";
 
 const pathVariants = {
   hidden: {
@@ -13,9 +14,9 @@ const pathVariants = {
 
 const PoopsLoader = () => {
   return (
-    <div className="poop-loader">
+    <div className={styles.poopLoader}>
       <svg
-        className="svg"
+        className={styles.svg}
         version="1.1"
         id="Capa_1"
         xmlns="http://www.w3.org/2000/svg"

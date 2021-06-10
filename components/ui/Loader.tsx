@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import styles from "../../styles/CommonUi.module.scss";
 
 const loader = {
   visible: {
@@ -16,7 +17,7 @@ const loader = {
 const Loader = () => {
   return (
     <motion.div
-      className="loader"
+      className={styles.loader}
       variants={loader}
       animate="visible"
     ></motion.div>

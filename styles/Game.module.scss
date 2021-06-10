@@ -1,0 +1,142 @@
+@import "global";
+
+.game {
+  background-color: #fff;
+  height: 100vh;
+  .drawCard {
+    // margin-top: 30px;
+    cursor: pointer;
+  }
+  .playersContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    .playerContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .avatar {
+        height: 60px;
+        width: 60px;
+        border-radius: 60px;
+        line-height: 60px;
+        margin: 10px;
+        text-align: center;
+        color: white;
+        background-color: gray;
+        font-size: 1.5rem;
+      }
+      .name {
+        margin: -0.4rem 0 1rem 0;
+        font-size: 1rem;
+      }
+    }
+  }
+  .msg,
+  .pooPoint {
+    text-align: center;
+  }
+
+  .cardsContainer {
+    padding: 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .cardContainer {
+      .foodCard {
+        cursor: pointer;
+        img {
+          transform: rotate(45deg);
+          width: 200px;
+        }
+      }
+      &:hover {
+        z-index: 3;
+      }
+    }
+    @media (min-width: 800px) {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .campCard {
+    img {
+      width: 10rem;
+    }
+  }
+}
+
+.shareId {
+  margin: 8rem 0 0 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .gameId {
+    display: flex;
+    border: none;
+    width: 280px;
+    position: relative;
+    background-color: rgb(228, 228, 228);
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 30px;
+    p {
+      font-weight: bolder;
+      padding-left: 20px;
+    }
+    img {
+      cursor: pointer;
+      height: 20px;
+      opacity: 0.8;
+      padding-right: 20px;
+    }
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      font-size: 0.8rem;
+      span {
+        visibility: hidden;
+        width: 60px;
+        height: 30px;
+        background-color: #444;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        line-height: 30px;
+        position: absolute;
+        z-index: 1;
+        bottom: 180%;
+        left: 50%;
+        margin-left: -40px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-weight: lighter;
+        &::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -8px;
+          border-width: 8px;
+          border-style: solid;
+          border-color: #444 transparent transparent transparent;
+        }
+      }
+      &:hover span {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.openIntro {
+  position: fixed;
+  top: 4rem;
+  right: 4rem;
+  width: 4rem;
+  height: 4rem;
+  background-color: $dark-brown;
+}

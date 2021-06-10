@@ -1,0 +1,70 @@
+@import "global";
+
+.home {
+  height: 100vh;
+  overflow: hidden;
+  background-color: $light-brown;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  .mainImg {
+    margin-top: -5rem;
+    img {
+      cursor: pointer;
+      width: 100%;
+      @media (min-width: 800px) {
+        width: 50%;
+      }
+    }
+  }
+  .button {
+    margin-top: 3rem;
+    @include activateButton($width: 120px);
+  }
+  .start {
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+    .button {
+      @include activateButton($width: 120px);
+    }
+    @media (min-width: 800px) {
+      display: block;
+      order: 1;
+      padding: 30rem 0rem 0 15rem;
+      flex: 5;
+    }
+  }
+  .intro {
+    padding: 3rem 5rem;
+    line-height: 24px;
+    color: $dark-brown;
+    @media (min-width: 800px) {
+      order: 2;
+      padding: 10rem 10rem 0 5rem;
+      flex: 7;
+    }
+    .button {
+      cursor: pointer;
+      margin-top: 60px;
+      &:hover {
+        font-weight: bolder;
+      }
+    }
+  }
+}
+
+.animationBox {
+  --guy-width: 45vw;
+  font-family: sans-serif;
+  position: relative;
+  text-align: center;
+  display: inline-flex;
+  flex-flow: column nowrap;
+}
+
+.floatingElement {
+  visibility: visible;
+  position: absolute;
+}

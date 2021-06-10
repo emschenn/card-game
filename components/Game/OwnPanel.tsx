@@ -12,7 +12,8 @@ import { ICard, IGameConfig } from "../../interfaces/gameConfig";
 
 // components
 import FoodCard from "./FoodCard";
-import OkButton from "./OkButton";
+import OkButton from "../ui/OkButton";
+import CampCard from "./CampCard";
 
 //utils
 import { withdrawACard, getNextAlivePlayerId } from "../../utils/gameUtils";
@@ -21,6 +22,7 @@ interface IProps {
   id: string;
   gameState: IGameConfig;
   setMsg: Function;
+  styles: CSSModule;
 }
 
 interface ISelectCard {
@@ -28,7 +30,7 @@ interface ISelectCard {
   index: number;
 }
 
-const OwnPanel = ({ id, gameState, setMsg }: IProps) => {
+const OwnPanel = ({ id, gameState, setMsg, styles }: IProps) => {
   const [enableCardClick, setEnableCardClick] = useState(true);
   const [selectCard, setSelectCard] = useState<ISelectCard | null>();
 
@@ -81,7 +83,7 @@ const OwnPanel = ({ id, gameState, setMsg }: IProps) => {
 
   return (
     <>
-      <div className="cards-container">
+      <div className={styles.cardsContainer}>
         {handCards.map((num, index) => (
           <FoodCard
             key={index}
@@ -90,10 +92,12 @@ const OwnPanel = ({ id, gameState, setMsg }: IProps) => {
             isSelect={index === selectCard?.index}
             setSelectCard={setSelectCard}
             clickable={enableCardClick}
+            styles={styles}
           />
         ))}
       </div>
       {selectCard?.card && <OkButton onOkClick={handleOkClick} text={"確定"} />}
+      <CampCard camp={me.camp} styles={styles} />
     </>
   );
 };
