@@ -68,7 +68,7 @@ const SetUpGame = ({ styles }) => {
         選擇遊玩人數，建立新局，再用邀請碼邀請朋友加入🙋🏻
       </div>
       <input
-        className={nameErrorMsg && styles.error}
+        className={nameErrorMsg ? styles.error : ""}
         placeholder="輸入你的名字"
         value={name}
         onChange={onNameInputChange}

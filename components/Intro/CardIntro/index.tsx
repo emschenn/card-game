@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 
 import Accordion from "./Accordion";
 
@@ -40,13 +41,13 @@ const CardIntro = ({ styles }: IProps) => {
 
   const getSelectCard: IGetSelectCard = () => {
     const category =
-      selectCard.item.id === "CAMP_CARD"
+      selectCard?.item.id === "CAMP_CARD"
         ? CAMP_CARD
-        : selectCard.item.id === "FOOD_CARD"
+        : selectCard?.item.id === "FOOD_CARD"
         ? FOOD_CARD
         : EVENT_CARD;
     const cardIndex = category.findIndex(
-      ({ name }) => name === selectCard.cardName
+      ({ name }) => name === selectCard?.cardName
     );
     return category[cardIndex];
   };
@@ -61,16 +62,26 @@ const CardIntro = ({ styles }: IProps) => {
       </div>
       <div className={styles.cardsImg}>
         <div className={styles.desc}>{selectCard?.item.desc}</div>
-        {selectCard?.cardName && (
-          <img
-            className={
-              (selectCard.item.id === "FOOD_CARD" && styles.foodImg) ||
-              (selectCard.item.id === "EVENT_CARD" && styles.eventImg) ||
-              (selectCard.item.id === "CAMP_CARD" && styles.campImg)
-            }
-            src={getSelectCard().img}
-          />
-        )}
+        {selectCard?.item &&
+          (selectCard?.item.id === "CAMP_CARD" ? (
+            <div className={styles.rectangleCard}>
+              <Image
+                src={getSelectCard().img}
+                alt={selectCard?.name}
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+          ) : (
+            <div className={styles.diamondCard}>
+              <Image
+                src={getSelectCard().img}
+                alt={selectCard?.name}
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+          ))}
       </div>
     </div>
   );

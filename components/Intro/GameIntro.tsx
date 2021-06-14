@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface IProps {
   styles: CSSModule;
@@ -11,7 +12,14 @@ const GameIntro = ({ styles }: IProps) => {
         每個人的腸胃，都存在著可以幫助人們大便的淸道夫以及阻礙人們排便的搗蛋鬼
       </h1>
       <div className={styles.container}>
-        <img src="/img/box.jpeg" />
+        <div className={styles.box}>
+          <Image
+            src="/img/box.jpeg"
+            alt="card-game-box"
+            layout="fill"
+            objectFit="contain"
+          />
+        </div>
         <div className={styles.desc}>
           <div className={styles.detail}>遊戲對象 遊戲人數 花費時間</div>
           <h2>

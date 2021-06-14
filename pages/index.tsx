@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 
 import styles from "../styles/Home.module.scss";
 
@@ -31,7 +32,12 @@ export default function Home() {
             setOpenIntroModal(true);
           }}
         >
-          <img src="/img/main.png" />
+          <Image
+            src="/img/main.png"
+            alt="Picture of the author"
+            width={500}
+            height={500}
+          />
         </div>
       </MovingElement>
       {/* <div className={styles.intro}>

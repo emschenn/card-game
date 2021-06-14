@@ -62,14 +62,14 @@ const JoinGame = ({ styles }) => {
       <div className={styles.title}>或是</div>
       <div className={styles.desc}>已有邀請碼，加入遊戲</div>
       <input
-        className={nameErrorMsg && styles.error}
+        className={nameErrorMsg ? styles.error : ""}
         placeholder="輸入你的名字"
         value={name}
         onChange={onNameInputChange}
       ></input>
       <span className={styles.errorMsg}>{nameErrorMsg}</span>
       <input
-        className={roomIdErrorMsg && styles.error}
+        className={roomIdErrorMsg ? styles.error : ""}
         placeholder="輸入邀請碼"
         value={roomId}
         onChange={onRoomIdInputChange}
