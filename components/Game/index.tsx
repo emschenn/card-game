@@ -26,7 +26,6 @@ import {
   decideDiePlayer,
   getRandomCardNum,
   checkIsAllAlivePlayersThreeCards,
-  decideWhoWins,
 } from "../../utils/gameUtils";
 
 interface IProps {
@@ -205,18 +204,6 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
       setShowDrawCardButton(false);
     }
   };
-
-  const showResult = (myCamp, winCamp) => {
-    const winner = winCamp === 0 ? "清道夫勝利" : "搗蛋鬼勝利";
-    const subtitle = myCamp === winCamp ? `恭喜，${winner}` : `歪歪，${winner}`;
-    openModal({
-      title: "遊戲結束",
-      subtitle,
-    });
-    openModal(5);
-  };
-
-  const restartTheGame = () => {};
 
   const openHelper = (id, text) => {
     setHelper({ isOpen: true, config: { id, text } });

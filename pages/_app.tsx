@@ -9,9 +9,9 @@ import { firebase } from "../src/initFirebase";
 const db = firebase.database();
 
 const containerAnimate = {
-  hidden: { y: "-100vh ", opacity: 0 },
+  hidden: { opacity: 0 },
   visible: {
-    y: "0vh ",
+    // y: "0vh ",
     opacity: 1,
     transition: {
       duration: 0.4,

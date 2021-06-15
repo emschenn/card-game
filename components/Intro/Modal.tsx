@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import styles from "../../styles/Modal.module.scss";
+import styles from "../../styles/Intro.module.scss";
 
 // components
 import Header from "./Header";
@@ -68,7 +68,7 @@ const Modal = ({ setOpenIntroModal }: IProps) => {
       >
         <path d="M17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41L17.59 5Z" />
       </svg>
-      <div className={styles.modal}>
+      <div className={selected === 0 ? styles.main : styles.modal}>
         <Header
           config={config}
           styles={styles}
