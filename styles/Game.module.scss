@@ -1,41 +1,66 @@
 @import "global";
 
 .game {
-  background-color: #fff;
+  background-color: #ecebe7;
   height: 100vh;
+  overflow: auto;
   .drawCard {
     // margin-top: 30px;
     cursor: pointer;
   }
-  .playersContainer {
+  .playersPanel {
+    z-index: 1;
     display: flex;
-    flex-wrap: wrap;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
     justify-content: center;
-    .playerContainer {
+    .playersContainer {
+      background-color: rgba($light-brown, 50%);
+      border-radius: 32px 32px 0 0;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      .avatar {
+      min-width: calc(100% - 50rem);
+      height: 120px;
+      .campCard {
         cursor: pointer;
-        height: 60px;
-        width: 60px;
-        border-radius: 60px;
-        line-height: 60px;
-        margin: 10px;
-        text-align: center;
-        color: white;
-        background-color: gray;
-        font-size: 1.5rem;
+        position: relative;
+        top: -90px;
+        padding-left: 3rem;
+        img {
+          width: 10rem;
+        }
       }
-      .name {
-        margin: -0.4rem 0 1rem 0;
-        font-size: 1rem;
+      .divider {
+        border-right: 1px solid $dark-brown;
+        margin: 1.5rem 0.5rem;
+      }
+      .playerContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0 0.5rem;
+        .avatar {
+          height: 80px;
+          width: 80px;
+          border-radius: 50%;
+          line-height: 80px;
+          margin: 10px;
+          text-align: center;
+          color: white;
+          background-color: gray;
+          font-size: 1.2rem;
+        }
+        span {
+          color: $dark-brown;
+          font-size: 0.8rem;
+
+          // width: 0.75rem;
+          // height: 0.75rem;
+          //  border-radius: 50%;
+        }
       }
     }
-  }
-  .msg,
-  .pooPoint {
-    text-align: center;
   }
 
   .cardsContainer {
@@ -43,47 +68,59 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: -2;
     .cardContainer {
-      .foodCard {
-        cursor: pointer;
-        position: relative;
-
-        .cardOverlay {
-          transform: rotate(45deg);
+      cursor: pointer;
+      width: 300px;
+      height: 300px;
+      position: relative;
+      --scale: 1;
+      transform: scale(var(--scale));
+      &:first-of-type {
+        transform: translateX(100px) scale(var(--scale));
+      }
+      &:last-of-type {
+        transform: translateX(-100px) scale(var(--scale));
+      }
+      &:hover {
+        --scale: 1.1;
+      }
+      .cardOverlay {
+        transform: rotate(45deg);
+        position: absolute;
+        top: 25%;
+        bottom: 0;
+        left: 25%;
+        right: 0;
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+        opacity: 0.5;
+        transition: 0.5s ease;
+        background-color: #000;
+        .text {
+          cursor: pointer;
+          color: white;
+          font-size: 20px;
           position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 100%;
-          width: 100%;
-          opacity: 0.4;
-          transition: 0.5s ease;
-          background-color: #000;
-          .text {
-            cursor: pointer;
-            color: white;
-            font-size: 20px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            opacity: 1;
-            -webkit-transform: translate(-50%, -50%) rotate(-45deg);
-            -ms-transform: translate(-50%, -50%) rotate(-45deg);
-            transform: translate(-50%, -50%) rotate(-45deg);
-            text-align: center;
-            span {
-              display: block;
-              padding-top: 1rem;
-              font-size: 0.8rem;
-            }
+          top: 50%;
+          left: 50%;
+          opacity: 1;
+          -webkit-transform: translate(-50%, -50%) rotate(-45deg);
+          -ms-transform: translate(-50%, -50%) rotate(-45deg);
+          transform: translate(-50%, -50%) rotate(-45deg);
+          text-align: center;
+          span {
+            display: block;
+            padding-top: 1rem;
+            font-size: 0.75rem;
           }
         }
-        img {
-          transform: rotate(45deg);
-          width: 200px;
-        }
       }
+      img {
+        width: 200px;
+      }
+
       &:hover {
         z-index: 3;
       }
@@ -93,26 +130,21 @@
       justify-content: center;
     }
   }
-
-  .campCard {
-    img {
-      width: 10rem;
-    }
-  }
 }
 
 .shareId {
-  margin: 8rem 0 0 0;
+  margin: 5rem 0 0 0;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: $dark-brown;
   .gameId {
     display: flex;
     border: none;
     width: 280px;
     position: relative;
-    background-color: rgb(228, 228, 228);
+    background-color: rgba(#fff, 60%);
     justify-content: space-between;
     align-items: center;
     border-radius: 30px;
@@ -173,4 +205,23 @@
   width: 4rem;
   height: 4rem;
   background-color: $dark-brown;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  background-color: $light-brown;
+  color: $dark-brown;
+  justify-content: space-between;
+  z-index: -100;
+  p {
+    width: 10rem;
+    text-align: center;
+    &:nth-of-type(2) {
+      width: 30rem;
+      span {
+        color: rgba($dark-brown, 70%);
+      }
+    }
+  }
 }

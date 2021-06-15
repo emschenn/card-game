@@ -10,6 +10,10 @@ import { IPlayer, IGameConfig } from "../../interfaces/gameConfig";
 // components
 import Player from "./Player";
 import OkButton from "../ui/OkButton";
+import CampCard from "./CampCard";
+
+// utils
+import { getNextAlivePlayerId } from "../../utils/gameUtils";
 
 interface IProps {
   id: string;
@@ -19,7 +23,10 @@ interface IProps {
 
 interface IPlayerArray {
   id: string;
-  IPlayer;
+  name: string;
+  isAlive: boolean;
+  handCards: number[];
+  camp: number;
 }
 
 const PlayersPanel = ({ id, gameState, styles }: IProps) => {
@@ -63,6 +70,7 @@ const PlayersPanel = ({ id, gameState, styles }: IProps) => {
   const playersPlaceholder = Array.from(
     { length: playersCount - Object.entries(players).length },
     (v, i) => ({
+      id: i.toString(),
       name: "",
       isAlive: false,
       handCards: [],
@@ -71,19 +79,36 @@ const PlayersPanel = ({ id, gameState, styles }: IProps) => {
   );
 
   return (
-    <>
+    <div className={styles.playersPanel}>
       <div className={styles.playersContainer}>
-        {playerArray.map((player) => (
-          <Player
-            player={player}
-            key={player.id}
-            clickable={enablePlayerClick}
-            isSelect={true}
-            isPlaceHolder={false}
-            setSelectPlayer={setSelectPlayer}
-            styles={styles}
-          />
-        ))}
+        {gameState.isStart && <CampCard camp={me.camp} styles={styles} />}{" "}
+        <Player
+          player={{ id: me.id, ...players[me.id] }}
+          key={me.id}
+          clickable={enablePlayerClick}
+          isSelect={false}
+          isPlaceHolder={false}
+          setSelectPlayer={setSelectPlayer}
+          styles={styles}
+        />
+        <span className={styles.divider} />
+        {playerArray.map((player) => {
+          if (player.id !== me.id)
+            return (
+              <Player
+                player={player}
+                key={player.id}
+                clickable={enablePlayerClick}
+                isSelect={
+                  me.isAlive &&
+                  player.id === getNextAlivePlayerId(me.id, players)
+                }
+                isPlaceHolder={false}
+                setSelectPlayer={setSelectPlayer}
+                styles={styles}
+              />
+            );
+        })}
         {playersPlaceholder.map((player, i) => (
           <Player
             player={player}
@@ -97,7 +122,7 @@ const PlayersPanel = ({ id, gameState, styles }: IProps) => {
         ))}
       </div>
       {selectPlayer && <OkButton onOkClick={handleOkClick} text={"確定"} />}
-    </>
+    </div>
   );
 };
 

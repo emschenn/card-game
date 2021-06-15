@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import Image from "next/image";
 
 // data
 import { FOOD_CARD } from "../../data/card";
@@ -13,7 +13,6 @@ import { ICard, IGameConfig } from "../../interfaces/gameConfig";
 // components
 import FoodCard from "./FoodCard";
 import OkButton from "../ui/OkButton";
-import CampCard from "./CampCard";
 
 //utils
 import { withdrawACard, getNextAlivePlayerId } from "../../utils/gameUtils";
@@ -23,6 +22,8 @@ interface IProps {
   gameState: IGameConfig;
   setMsg: Function;
   styles: CSSModule;
+  drawCard: () => void;
+  showDrawCardButton: boolean;
 }
 
 interface ISelectCard {
@@ -30,7 +31,14 @@ interface ISelectCard {
   index: number;
 }
 
-const OwnPanel = ({ id, gameState, setMsg, styles }: IProps) => {
+const OwnPanel = ({
+  id,
+  gameState,
+  setMsg,
+  styles,
+  drawCard,
+  showDrawCardButton,
+}: IProps) => {
   const [enableCardClick, setEnableCardClick] = useState(true);
   const [selectCard, setSelectCard] = useState<ISelectCard | null>();
 
@@ -73,10 +81,10 @@ const OwnPanel = ({ id, gameState, setMsg, styles }: IProps) => {
   const handleOkClick = () => {
     setSelectCard(null);
     if (step === 1) {
-      setMsg("等待大家完成動作");
+      if (me.isAlive) setMsg("等待他人完成動作...");
       withdrawOwnCardAndAddToCards("passCards", passCards);
     } else if (step === 2) {
-      setMsg("等待他人出牌");
+      if (me.isAlive) setMsg("等待他人出牌...");
       withdrawOwnCardAndAddToCards("playCards", playCards);
     }
   };
@@ -84,6 +92,17 @@ const OwnPanel = ({ id, gameState, setMsg, styles }: IProps) => {
   return (
     <>
       <div className={styles.cardsContainer}>
+        {showDrawCardButton && me.isAlive && (
+          <div className={styles.cardContainer}>
+            <Image
+              src="/img/emptyFoodCard.png"
+              alt="empty card"
+              layout="fill"
+              objectFit="contain"
+              onClick={drawCard}
+            />
+          </div>
+        )}
         {handCards.map((num, index) => (
           <FoodCard
             key={index}
@@ -98,7 +117,6 @@ const OwnPanel = ({ id, gameState, setMsg, styles }: IProps) => {
         ))}
       </div>
       {/* {selectCard?.card && <OkButton onOkClick={handleOkClick} text={"確定"} />} */}
-      <CampCard camp={me.camp} styles={styles} />
     </>
   );
 };

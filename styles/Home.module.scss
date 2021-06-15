@@ -9,15 +9,10 @@
   align-items: center;
   flex-direction: column;
   .mainImg {
-    margin-top: -5rem;
-    img {
-      // cursor: pointer;
-      cursor: url("../public/img/clickMe.png"), auto;
-      width: 100%;
-      @media (min-width: 800px) {
-        width: 50%;
-      }
-    }
+    cursor: pointer;
+    position: relative;
+    width: 80vw;
+    height: 80vh;
   }
   .button {
     margin-top: 3rem;

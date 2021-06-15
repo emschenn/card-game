@@ -40,7 +40,7 @@ const SetUpGame = ({ styles }) => {
       isStart: false,
       playersCount: count,
       pooPoint: 0,
-      round: 1,
+      round: 0,
       step: 0,
       passCards: { isEmpty: true },
       playCards: { isEmpty: true },

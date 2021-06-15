@@ -31,6 +31,26 @@ export const getNextAlivePlayerId = (myId, players) => {
   }
 };
 
+export const getPrevAlivePlayerName = (myId, players) => {
+  const playersArray = Object.entries(players).map(([key, value]) => {
+    return {
+      id: key,
+      ...value,
+    };
+  });
+  const myIndex = playersArray.findIndex((player) => player.id === myId);
+  for (let i = myIndex - 1; i >= 0; i--) {
+    if (playersArray[i].isAlive) {
+      return playersArray[i].name;
+    }
+  }
+  for (let i = playersArray.length - 1; i > myIndex; i--) {
+    if (playersArray[i].isAlive) {
+      return playersArray[i].name;
+    }
+  }
+};
+
 export const receivePassCardArray = (myId, players, passCard) => {
   let newCards;
   Object.entries(passCard).forEach(([key, value]) => {
@@ -41,6 +61,11 @@ export const receivePassCardArray = (myId, players, passCard) => {
   });
   return newCards;
 };
+
+export const receiveCardFromWho = (myId, players, passCard) => ({
+  from: getPrevAlivePlayerName(myId, players),
+  card: FOOD_CARD[passCard[myId]].name,
+});
 
 export const drawNewCardArray = (myId, players) => {
   const cards = players[myId].handCards;
@@ -56,6 +81,14 @@ export const calculateTotalPooPoint = (playCard, pooPoint) => {
     pooPoint += FOOD_CARD[value].point;
   });
   return pooPoint;
+};
+
+export const calculatePooPoint = (playCard) => {
+  let i = 0;
+  Object.entries(playCard).forEach(([_, value]) => {
+    i += FOOD_CARD[value].point;
+  });
+  return i >= 0 ? `+${i}` : `-${Math.abs(i)}`;
 };
 
 export const decideDiePlayer = (votePlayers) => {

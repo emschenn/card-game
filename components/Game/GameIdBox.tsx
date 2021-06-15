@@ -1,5 +1,6 @@
 import React from "react";
 
+import PoopsLoader from "../ui/PoopsLoader";
 interface IProps {
   id: string;
   styles: CSSModule;
@@ -36,7 +37,8 @@ const GameIdBox = ({ id, styles }: IProps) => {
           />
           <span id="myTooltip">Copy</span>
         </div>
-      </div>{" "}
+      </div>
+      <PoopsLoader />
     </div>
   );
 };

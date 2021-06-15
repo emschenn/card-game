@@ -34,9 +34,9 @@ export default function Home() {
         >
           <Image
             src="/img/main.png"
-            alt="Picture of the author"
-            width={500}
-            height={500}
+            alt="Game"
+            layout="fill"
+            objectFit="contain"
           />
         </div>
       </MovingElement>

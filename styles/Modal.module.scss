@@ -8,6 +8,7 @@
 }
 
 .introModal {
+  z-index: 2000;
   height: 100vh;
   width: 100%;
   position: fixed;
@@ -165,6 +166,8 @@
 
 .gameIntro {
   @include contentComponent();
+  position: relative;
+  background-color: #aba79c;
   h1 {
     font-size: 1.25rem;
     line-height: 1.5rem;

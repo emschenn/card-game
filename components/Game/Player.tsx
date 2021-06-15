@@ -3,8 +3,15 @@ import { motion } from "framer-motion";
 
 import { IPlayer } from "../../interfaces/gameConfig";
 
+interface IPlayerArray {
+  id: string;
+  name: string;
+  isAlive: boolean;
+  handCards: number[];
+  camp: number;
+}
 interface IProps {
-  player: IPlayer;
+  player: IPlayerArray;
   isSelect: boolean;
   setSelectPlayer: Function;
   clickable: boolean;
@@ -24,8 +31,8 @@ const Player = ({
 
   const onPlayerClick = (e) => {
     e.preventDefault();
+    console.log(player);
     if (clickable) {
-      e.preventDefault();
       setSelectPlayer(player);
     }
   };
@@ -47,7 +54,13 @@ const Player = ({
       >
         {name[0]}
       </motion.div>
-      <div className={styles.name}>{name}</div>
+      <span
+        style={{
+          visibility: isPlaceHolder || !isSelect ? "hidden" : "visible",
+        }}
+      >
+        傳牌對象
+      </span>
     </div>
   );
 };

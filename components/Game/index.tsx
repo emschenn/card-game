@@ -11,12 +11,15 @@ import { IGameConfig } from "../../interfaces/gameConfig";
 // components
 import OwnPanel from "./OwnPanel";
 import PlayersPanel from "./PlayersPanel";
-import AnimateModal from "../ui/AnimateModal";
+import Modal from "./Modal";
 import GameIdBox from "./GameIdBox";
-import Modal from "../Intro/Modal";
+import Header from "./Header";
+import Helper from "./Helper";
+import Discussion from "./Discussion";
 
 // utils
 import {
+  receiveCardFromWho,
   getAlivePlayersArray,
   receivePassCardArray,
   calculateTotalPooPoint,
@@ -38,22 +41,24 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
   const db = useContext(FirebaseContext);
   const { me, setMe } = useContext(GameContext);
   const [msg, setMsg] = useState("");
-  const [modalConfig, setModalConfig] = useState({});
-  const [showModal, setShowModal] = useState(false);
-  const [openIntroModal, setOpenIntroModal] = useState(false);
+  const [helper, setHelper] = useState({
+    isOpen: false,
+    config: { id: -1, text: "" },
+  });
+  const [modal, setModal] = useState({
+    isOpen: false,
+    num: -1,
+  });
+  const [discussion, setDiscussion] = useState({
+    isOpen: false,
+    state: -1,
+  });
   const [showDrawCardButton, setShowDrawCardButton] = useState(false);
 
-  const openModal = (props) => {
-    console.log("show modal!");
-    console.log(props);
-    setModalConfig(props);
-    setShowModal(true);
-  };
-
   useEffect(() => {
-    // if (!me) {
-    //   router.push("/");
-    // }
+    if (!me) {
+      router.push("/startGame");
+    }
     const ref = db.ref(`games/${id}`);
     ref.on("value", (snapshot) => {
       const newState = snapshot.val();
@@ -73,14 +78,14 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
       const alivePlayers = getAlivePlayersArray(players);
       if (step === 0) {
         if (!isStart) {
-          setMsg("等待大家加入...");
           // if everybody join
           if (Object.keys(players).length === playersCount) {
-            openModal({ title: "遊戲開始💩" });
-            setMsg("選擇要傳給隔壁的人的牌");
+            openHelper(0, "快快確認角色牌\n準備上工!");
+            setMsg("選擇要傳給隔壁的人的卡牌");
             // only the last person do the global update
             if (Object.keys(players)[playersCount - 1] === me.id) {
               updates[`games/${id}/step`] = 1;
+              updates[`games/${id}/round`] = 1;
               updates[`games/${id}/isStart`] = true;
               db.ref().update(updates);
             }
@@ -88,11 +93,11 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
         } else {
           // if everybody is ready for the next round
           if (checkIsAllAlivePlayersThreeCards(players)) {
-            openModal({
-              title: "遊戲開始💩",
-              subtitle: `第${round}回合`,
-            });
-            setMsg("選擇要傳給隔壁的人的牌");
+            openHelper(0, `開始第${round}回合`);
+            if (me.isAlive) setMsg("選擇要傳給隔壁的人的卡牌");
+            updates[`games/${id}/votePlayers`] = { isEmpty: true };
+            updates[`games/${id}/passCards`] = { isEmpty: true };
+            updates[`games/${id}/playCards`] = { isEmpty: true };
             updates[`games/${id}/step`] = 1;
             db.ref().update(updates);
           }
@@ -102,10 +107,13 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
           !passCards.isEmpty &&
           Object.keys(passCards).length === alivePlayers.length
         ) {
-          setMsg("選擇要出的牌");
-          // only the last person do the global update, other update own cards
-          //Object.keys(passCards)[alivePlayers.length - 1] === me.id
           if (me.isAlive) {
+            setMsg("選擇要出的卡牌");
+            const receive = receiveCardFromWho(me.id, players, passCards);
+            openHelper(
+              1,
+              `叮咚!\n你收到了來自${receive.from}的${receive.card}`
+            );
             updates[`games/${id}/players/${me.id}/handCards`] =
               receivePassCardArray(me.id, players, passCards);
             updates[`games/${id}/step`] = 2;
@@ -118,12 +126,9 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
           Object.keys(playCards).length === alivePlayers.length
         ) {
           const newPoint = calculateTotalPooPoint(playCards, pooPoint);
-          openModal({
-            title: `更新💩指數 ${newPoint}`,
-            subtitle: `目前是第${round}回合`,
-          });
           if (round !== 3) {
-            setMsg("選擇要淘汰的人");
+            if (me.isAlive) setMsg("選擇要淘汰的人");
+            openModal(0);
           } else {
             setMsg("");
           }
@@ -136,50 +141,51 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
         }
       } else if (step === 3) {
         if (round === 3) {
-          const winCamp = decideWhoWins(pooPoint, playersCount);
-          showResult(me.camp, winCamp);
+          // const winCamp = decideWhoWins(pooPoint, playersCount);
+          // showResult(me.camp, winCamp);
+          openModal(5);
+
           return;
         }
+
         if (
           !votePlayers.isEmpty &&
           Object.keys(votePlayers).length === alivePlayers.length
         ) {
           const diePlayer = decideDiePlayer(votePlayers);
           if (!diePlayer) {
-            openModal({ title: "平手，請大家重投" });
+            setDiscussion({ isOpen: true, state: 1 });
+            setModal({ isOpen: true, num: 4 });
             // only the last person do the global update
             if (Object.keys(votePlayers)[alivePlayers.length - 1] === me.id) {
               updates[`games/${id}/votePlayers`] = { isEmpty: true };
               db.ref().update(updates);
             }
-            return;
-          }
-          if (me.id === diePlayer) {
-            openModal({
-              title: "你已被淘汰",
-              subtitle: "👋🏼👋🏼",
-              showButton: true,
-            });
-            setMe({ ...me, isAlive: false });
           } else {
-            openModal({
-              title: `${players[diePlayer].name}已被淘汰`,
-              subtitle: "進入第二回合，開始前請先抽牌",
-              showButton: true,
-            });
-            setShowDrawCardButton(true);
+            if (me.id === diePlayer) {
+              setModal({ isOpen: true, num: 2 });
+              setMe({ ...me, isAlive: false });
+              setMsg("你已被淘汰，現在開始只能觀賽、不能動作");
+            } else {
+              if (!me.isAlive) {
+                setDiscussion({ isOpen: false, state: -1 });
+                openHelper(
+                  2,
+                  `投票結果：${players[diePlayer].name}已經被淘汰 👋🏼`
+                );
+                return;
+              }
+              setModal({ isOpen: true, num: 3 });
+            }
+            // only the last person do the global update
+            if (Object.keys(votePlayers)[alivePlayers.length - 1] === me.id) {
+              updates[`games/${id}/players/${diePlayer}/isAlive`] = false;
+              updates[`games/${id}/round`] = round + 1;
+              updates[`games/${id}/step`] = 0;
+              db.ref().update(updates);
+            }
+            if (me.isAlive) setMsg("");
           }
-          // only the last person do the global update
-          if (Object.keys(votePlayers)[alivePlayers.length - 1] === me.id) {
-            updates[`games/${id}/players/${diePlayer}/isAlive`] = false;
-            updates[`games/${id}/round`] = round + 1;
-            updates[`games/${id}/step`] = 0;
-            updates[`games/${id}/votePlayers`] = { isEmpty: true };
-            updates[`games/${id}/passCards`] = { isEmpty: true };
-            updates[`games/${id}/playCards`] = { isEmpty: true };
-            db.ref().update(updates);
-          }
-          setMsg("");
         }
       }
     });
@@ -207,53 +213,116 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
       title: "遊戲結束",
       subtitle,
     });
+    openModal(5);
   };
 
   const restartTheGame = () => {};
 
+  const openHelper = (id, text) => {
+    setHelper({ isOpen: true, config: { id, text } });
+  };
+
+  const openModal = (num) => {
+    setModal({ isOpen: true, num });
+  };
+
+  const goDiscuss = () => {
+    setModal({ isOpen: false, num: -1 });
+    setDiscussion({ isOpen: true, state: 0 });
+  };
+
+  const goVote = () => {
+    setModal({ isOpen: false, num: -1 });
+    setDiscussion({ ...discussion, state: 1 });
+  };
+
+  const closeDiscussion = () => {
+    const diePlayer = decideDiePlayer(gameState.votePlayers);
+    console.log(diePlayer);
+    console.log(me);
+    setDiscussion({ isOpen: false, state: -1 });
+    setModal({ isOpen: false, num: -1 });
+    if (diePlayer === me.id) {
+      openHelper(2, `投票結果：你已經被淘汰 👋🏼`);
+    } else {
+      setShowDrawCardButton(true);
+      openHelper(
+        2,
+        `投票結果：${gameState.players[diePlayer].name}已經被淘汰 👋🏼`
+      );
+    }
+  };
+
   return (
     <div className={styles.game}>
-      <PlayersPanel id={id} gameState={gameState} styles={styles} />
       <AnimatePresence>
-        {showModal && (
-          <AnimateModal
-            config={modalConfig}
-            show={showModal}
-            setShow={setShowModal}
+        {discussion.isOpen && (
+          <Discussion
+            id={id}
+            state={discussion.state}
+            gameState={gameState}
+            setDiscussion={setDiscussion}
+            setModal={setModal}
+            setMe={setMe}
           />
         )}
       </AnimatePresence>
-
-      <div className={styles.msg}>{msg} </div>
-      {gameState.isStart ? (
-        <>
-          <div className={styles.pooPoint}> 💩: {gameState.pooPoint}</div>
-          <OwnPanel
-            id={id}
-            gameState={gameState}
-            setMsg={setMsg}
-            styles={styles}
+      <Header styles={styles} gameState={gameState} msg={msg} />
+      <AnimatePresence>
+        {helper.isOpen && (
+          <Helper
+            config={helper.config}
+            closeHelper={() => {
+              setHelper({ isOpen: false, config: { id: -1, text: "" } });
+            }}
           />
-          {showDrawCardButton && (
-            <div className={styles.drawCard} onClick={drawCard}>
-              抽牌
-            </div>
-          )}
-        </>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {modal.isOpen && (
+          <Modal
+            num={modal.num}
+            gameState={gameState}
+            closeModal={() => {
+              setModal({ isOpen: false, num: -1 });
+            }}
+            goVote={goVote}
+            goDiscuss={goDiscuss}
+            closeDiscussion={closeDiscussion}
+          />
+        )}
+      </AnimatePresence>
+      {gameState.isStart ? (
+        <OwnPanel
+          id={id}
+          gameState={gameState}
+          setMsg={setMsg}
+          styles={styles}
+          drawCard={drawCard}
+          showDrawCardButton={showDrawCardButton}
+        />
       ) : (
         <GameIdBox id={id} styles={styles} />
       )}
-      <div
-        className={styles.openIntro}
-        onClick={() => {
-          setOpenIntroModal(true);
-        }}
-      ></div>
-      <AnimatePresence>
-        {openIntroModal && <Modal setOpenIntroModal={setOpenIntroModal} />}
-      </AnimatePresence>
+      <PlayersPanel id={id} gameState={gameState} styles={styles} />
     </div>
   );
 };
 
 export default Game;
+{
+  /* <div
+        onClick={
+          //    () => openHelper(1, "hellohellohel\nlohellohellohellohellohello")
+          () => openModal(0)
+        }
+      >
+        test helper
+      </div> */
+}
+
+// {showDrawCardButton && (
+//   <div className={styles.drawCard} onClick={drawCard}>
+//     抽牌
+//   </div>
+// )}

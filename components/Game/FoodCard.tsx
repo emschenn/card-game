@@ -1,9 +1,6 @@
 import React, { useContext } from "react";
 import { ICard } from "../../interfaces/gameConfig";
-import { motion } from "framer-motion";
-
-// context
-import { FirebaseContext, GameContext } from "../../src/context";
+import Image from "next/image";
 
 interface ISelectCard {
   card: ICard;
@@ -44,21 +41,21 @@ const FoodCard = ({
 
   return (
     <div className={styles.cardContainer}>
-      <motion.div
-        className={styles.foodCard}
+      <Image
+        src={img}
+        alt={name}
+        layout="fill"
+        objectFit="contain"
         onClick={onCardClick}
-        whileHover={clickable ? { scale: 1.1 } : {}}
-      >
-        <img src={img} alt={name} onClick={onCardClick} />
-        {index === selectCard?.index && (
-          <div className={styles.cardOverlay} onClick={onDoubleClick}>
-            <div className={styles.text}>
-              確定這張嗎
-              <span>再按一次送出</span>
-            </div>
+      />
+      {index === selectCard?.index && (
+        <div className={styles.cardOverlay} onClick={onDoubleClick}>
+          <div className={styles.text}>
+            確定嗎
+            <span>再按一次送出</span>
           </div>
-        )}
-      </motion.div>
+        </div>
+      )}
     </div>
   );
 };
