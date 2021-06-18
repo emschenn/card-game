@@ -21,6 +21,12 @@
       display: flex;
       min-width: calc(100% - 50rem);
       height: 130px;
+      .overflow {
+        border-radius: 32px 32px 0 0;
+        max-width: 55vw;
+        display: flex;
+        overflow: auto;
+      }
       .campCard {
         cursor: pointer;
         position: relative;
@@ -51,6 +57,7 @@
           color: white;
           background-color: gray;
           font-size: 1.2rem;
+          overflow: hidden;
         }
         span {
           color: $dark-brown;

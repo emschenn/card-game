@@ -9,7 +9,6 @@ import { IPlayer, IGameConfig } from "../../interfaces/gameConfig";
 
 // components
 import Player from "./Player";
-import OkButton from "../ui/OkButton";
 import CampCard from "./CampCard";
 
 // utils
@@ -49,19 +48,6 @@ const PlayersPanel = ({ id, gameState, styles }: IProps) => {
     }
   }, [step, votePlayers]);
 
-  const handleOkClick = (e) => {
-    e.preventDefault;
-    const updates = {};
-    const votePlayer = {};
-    votePlayer[me.id] = selectPlayer.id;
-    updates[`games/${id}/votePlayers`] = votePlayers.isEmpty
-      ? votePlayer
-      : { ...votePlayers, ...votePlayer };
-    db.ref().update(updates);
-    setSelectPlayer(null);
-    setEnablePlayerClick(false);
-  };
-
   const playerArray = Object.entries(players).map(([key, value]) => ({
     id: key,
     ...value,
@@ -92,36 +78,37 @@ const PlayersPanel = ({ id, gameState, styles }: IProps) => {
           styles={styles}
         />
         <span className={styles.divider} />
-        {playerArray.map((player) => {
-          if (player.id !== me.id)
-            return (
-              <Player
-                player={player}
-                key={player.id}
-                clickable={enablePlayerClick}
-                isSelect={
-                  me.isAlive &&
-                  player.id === getNextAlivePlayerId(me.id, players)
-                }
-                isPlaceHolder={false}
-                setSelectPlayer={setSelectPlayer}
-                styles={styles}
-              />
-            );
-        })}
-        {playersPlaceholder.map((player, i) => (
-          <Player
-            player={player}
-            key={i}
-            clickable={enablePlayerClick}
-            isSelect={false}
-            isPlaceHolder={true}
-            setSelectPlayer={setSelectPlayer}
-            styles={styles}
-          />
-        ))}
+        <div className={styles.overflow}>
+          {playerArray.map((player) => {
+            if (player.id !== me.id)
+              return (
+                <Player
+                  player={player}
+                  key={player.id}
+                  clickable={enablePlayerClick}
+                  isSelect={
+                    me.isAlive &&
+                    player.id === getNextAlivePlayerId(me.id, players)
+                  }
+                  isPlaceHolder={false}
+                  setSelectPlayer={setSelectPlayer}
+                  styles={styles}
+                />
+              );
+          })}
+          {playersPlaceholder.map((player, i) => (
+            <Player
+              player={player}
+              key={i}
+              clickable={enablePlayerClick}
+              isSelect={false}
+              isPlaceHolder={true}
+              setSelectPlayer={setSelectPlayer}
+              styles={styles}
+            />
+          ))}
+        </div>
       </div>
-      {selectPlayer && <OkButton onOkClick={handleOkClick} text={"確定"} />}
     </div>
   );
 };

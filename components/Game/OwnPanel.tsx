@@ -12,7 +12,6 @@ import { ICard, IGameConfig } from "../../interfaces/gameConfig";
 
 // components
 import FoodCard from "./FoodCard";
-import OkButton from "../ui/OkButton";
 
 //utils
 import { withdrawACard, getNextAlivePlayerId } from "../../utils/gameUtils";
@@ -116,7 +115,6 @@ const OwnPanel = ({
           />
         ))}
       </div>
-      {/* {selectCard?.card && <OkButton onOkClick={handleOkClick} text={"確定"} />} */}
     </>
   );
 };

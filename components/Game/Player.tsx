@@ -52,7 +52,7 @@ const Player = ({
           scale: isPlaceHolder || !isAlive || !clickable ? 1 : 1.1,
         }}
       >
-        {name[0]}
+        {name}
       </motion.div>
       <span
         style={{
