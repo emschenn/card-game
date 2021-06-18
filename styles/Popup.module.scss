@@ -212,3 +212,82 @@
     margin-block: 0;
   }
 }
+
+.gameOverBackdrop {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 500;
+}
+.gameOver {
+  cursor: pointer;
+  height: 70vh;
+  width: 80vw;
+  overflow: hidden;
+  margin: auto;
+  top: 15vh;
+  left: 10vw;
+  position: fixed;
+  background-color: $light-brown;
+  z-index: 400;
+  background: #ffffff;
+  border: 2px solid #5e493c;
+  box-sizing: border-box;
+  box-shadow: 7px 7px 0px #5e493c;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  @media (max-width: 650px) {
+    flex-direction: column;
+  }
+  .content {
+    flex: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    h2 {
+      font-size: 2rem;
+      line-height: 2.4rem;
+      text-align: center;
+      letter-spacing: 0.14em;
+      color: $dark-brown;
+    }
+    h1 {
+      font-size: 2.5rem;
+      letter-spacing: 0.14em;
+      span {
+        padding-right: 0.5rem;
+        font-size: 3rem;
+        text-align: center;
+        letter-spacing: 0.14em;
+        color: #ffffff;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+      }
+    }
+    .players {
+      display: flex;
+      .player {
+        height: 4rem;
+        width: 4rem;
+        border-radius: 50%;
+        line-height: 4rem;
+        margin: 4px;
+        text-align: center;
+        color: white;
+        background-color: #c4c4c4;
+        font-size: 1.2rem;
+      }
+    }
+  }
+  .img {
+    flex: 6;
+    width: 70vw;
+    height: 70vh;
+    position: relative;
+    top: 3rem;
+  }
+}

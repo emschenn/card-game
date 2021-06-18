@@ -75,7 +75,7 @@ const SetUpGame = ({ styles }) => {
       ></input>
       <span className={styles.errorMsg}>{nameErrorMsg}</span>
       <div className={styles.count}>
-        {[2, 3, 4, 5, 6].map((i) => (
+        {[5, 6, 7, 8, 9].map((i) => (
           <option
             className={count === i && styles.selectItem}
             key={i}

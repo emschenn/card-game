@@ -20,11 +20,11 @@
       border-radius: 32px 32px 0 0;
       display: flex;
       min-width: calc(100% - 50rem);
-      height: 120px;
+      height: 130px;
       .campCard {
         cursor: pointer;
         position: relative;
-        top: -90px;
+        top: -70px;
         padding-left: 3rem;
         img {
           width: 10rem;
@@ -40,6 +40,7 @@
         align-items: center;
         justify-content: center;
         margin: 0 0.5rem;
+        margin-top: -1rem;
         .avatar {
           height: 80px;
           width: 80px;
@@ -54,7 +55,6 @@
         span {
           color: $dark-brown;
           font-size: 0.8rem;
-
           // width: 0.75rem;
           // height: 0.75rem;
           //  border-radius: 50%;
@@ -214,6 +214,7 @@
   color: $dark-brown;
   justify-content: space-between;
   z-index: -100;
+  line-height: 1rem;
   p {
     width: 10rem;
     text-align: center;

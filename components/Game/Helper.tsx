@@ -134,7 +134,7 @@ const helperConfig = {
 };
 const Helper = ({ config, closeHelper }: IProps) => {
   useEffect(() => {
-    const time = config?.id === 0 ? 5000 : 3000;
+    const time = config?.id === 0 ? 6500 : 4500;
     setTimeout(() => {
       closeHelper();
     }, time);

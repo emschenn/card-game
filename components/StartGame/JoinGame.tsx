@@ -53,7 +53,8 @@ const JoinGame = ({ styles }) => {
         router.push(`/game/${roomId}`);
       })
       .catch((error) => {
-        console.error(error);
+        setRoomIdErrorMsg("邀請碼錯誤");
+        console.log(error);
       });
   };
 

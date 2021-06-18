@@ -12,7 +12,12 @@ import { FirebaseContext, GameContext } from "../../src/context";
 
 // interface
 import { IGameConfig } from "../../interfaces/gameConfig";
+
+// components
 import PoopsLoader from "../ui/PoopsLoader";
+
+// utils
+import { getAlivePlayersArray } from "../../utils/gameUtils";
 
 /*******************
  * 0: discussion
@@ -47,16 +52,6 @@ const animation = {
   },
 };
 
-const a = [
-  { player: "dfer" },
-  { player: "dfer" },
-  { player: "dfer" },
-  { player: "dfer" },
-  { player: "dfer" },
-  { player: "dfer" },
-  { player: "dfer" },
-];
-
 const Discussion = ({
   id,
   state,
@@ -65,13 +60,14 @@ const Discussion = ({
   setMe,
   setDiscussion,
 }: IProps) => {
-  const [sec, setSec] = useState(3);
   const [selectPlayer, setSelectPlayer] = useState(null);
   const config = Object.entries(gameState.playCards).map(([key, value]) => ({
     player: { id: key, ...gameState.players[key] },
     card: value,
   }));
-  const { votePlayers } = gameState;
+  const { votePlayers, players } = gameState;
+  const time = getAlivePlayersArray(players).length * 20;
+  const [sec, setSec] = useState(time);
 
   const { me } = useContext(GameContext);
   const db = useContext(FirebaseContext);

@@ -29,7 +29,7 @@ const Header = ({ styles, gameState, msg }: IProps) => {
             setOpenIntroModal(true);
           }}
         >
-          遊戲指南
+          👉🏼 遊戲指南 👈🏼
         </p>
         <p>
           {round[gameState?.round]}

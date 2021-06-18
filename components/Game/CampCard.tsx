@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactCardFlip from "react-card-flip";
 
+import { CAMP_CARD } from "../../data/card";
 interface IProps {
   camp: number;
   styles: CSSModule;
@@ -9,8 +10,7 @@ interface IProps {
 const CampCard = ({ camp, styles }: IProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const backImg =
-    camp === 1 ? "/img/campCard/bad.png" : "/img/campCard/good.png";
+  const backImg = CAMP_CARD[camp].img;
   return (
     <div className={styles.campCard}>
       <ReactCardFlip

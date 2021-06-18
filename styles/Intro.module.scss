@@ -43,7 +43,7 @@
     -webkit-box-shadow: 5px 5px 25px 0px rgba(76, 76, 76, 0.3);
     box-shadow: 5px 5px 25px 0px rgba(76, 76, 76, 0.3);
     @media (min-width: 800px) {
-      margin: 6rem 10rem;
+      margin: 6rem 5rem;
     }
     .header {
       background-color: transparent;
@@ -101,7 +101,7 @@
   background-image: url("../public/img/box.png");
   background-repeat: no-repeat;
   background-size: contain;
-  background-position: bottom;
+  background-position: right bottom;
   background-color: #aca89d;
 }
 .modal {
@@ -193,6 +193,16 @@
     left: 2rem;
     width: 400px;
     height: 180px;
+    @media (max-width: 650px) {
+      width: 300px;
+      height: 135px;
+    }
+    @media (max-width: 450px) {
+      width: 200px;
+      height: 90px;
+      top: 0rem;
+      left: 0.5rem;
+    }
   }
   .container {
     display: flex;
@@ -202,6 +212,7 @@
       flex-direction: row;
       align-items: center;
     }
+
     .box {
       position: relative;
       width: 400px;
@@ -212,7 +223,11 @@
       }
     }
     .desc {
-      padding: 0 2rem;
+      padding: 0 24rem 0 2rem;
+      @media (max-width: 450px) {
+        padding: 0 2rem 0 0.5rem;
+        font-size: 1rem;
+      }
       h2 {
         font-size: 0.9rem;
         font-weight: 500;
@@ -236,6 +251,9 @@
     display: flex;
     flex-direction: column;
     list-style: none;
+    @media (max-width: 450px) {
+      padding: 0 0 0 0.5rem;
+    }
     li {
       display: flex;
       flex-shrink: 0;
@@ -254,6 +272,9 @@
       p {
         padding: 0.2rem 2rem 1rem 1.5rem;
         margin-block: 0;
+        @media (max-width: 450px) {
+          padding: 0.2rem 0.5rem 1rem 0.5rem;
+        }
       }
     }
   }
@@ -262,7 +283,9 @@
 .stepIntro {
   @include contentComponent();
   line-height: 1.4rem;
-
+  @media (max-width: 450px) {
+    margin: 0 0 0 -2rem;
+  }
   ul {
     display: flex;
     flex-direction: column;
@@ -289,6 +312,9 @@
 
       .content {
         padding: 0 2rem 1rem 2rem;
+        @media (max-width: 450px) {
+          padding: 0 1rem;
+        }
       }
     }
   }

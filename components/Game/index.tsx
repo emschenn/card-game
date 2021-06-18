@@ -16,6 +16,7 @@ import GameIdBox from "./GameIdBox";
 import Header from "./Header";
 import Helper from "./Helper";
 import Discussion from "./Discussion";
+import GameOver from "./GameOver";
 
 // utils
 import {
@@ -26,6 +27,7 @@ import {
   decideDiePlayer,
   getRandomCardNum,
   checkIsAllAlivePlayersThreeCards,
+  decideWhoWins,
 } from "../../utils/gameUtils";
 
 interface IProps {
@@ -43,6 +45,10 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
   const [helper, setHelper] = useState({
     isOpen: false,
     config: { id: -1, text: "" },
+  });
+  const [gameOver, setGameOver] = useState({
+    isOpen: false,
+    winner: -1,
   });
   const [modal, setModal] = useState({
     isOpen: false,
@@ -79,7 +85,7 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
         if (!isStart) {
           // if everybody join
           if (Object.keys(players).length === playersCount) {
-            openHelper(0, "快快確認角色牌\n準備上工!");
+            openHelper(0, "快去左下角確認角色牌\n準備上工!");
             setMsg("選擇要傳給隔壁的人的卡牌");
             // only the last person do the global update
             if (Object.keys(players)[playersCount - 1] === me.id) {
@@ -140,10 +146,8 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
         }
       } else if (step === 3) {
         if (round === 3) {
-          // const winCamp = decideWhoWins(pooPoint, playersCount);
-          // showResult(me.camp, winCamp);
-          openModal(5);
-
+          const winCamp = decideWhoWins(pooPoint, playersCount);
+          setGameOver({ isOpen: true, winner: winCamp });
           return;
         }
 
@@ -151,40 +155,33 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
           !votePlayers.isEmpty &&
           Object.keys(votePlayers).length === alivePlayers.length
         ) {
-          const diePlayer = decideDiePlayer(votePlayers);
-          if (!diePlayer) {
-            setDiscussion({ isOpen: true, state: 1 });
-            setModal({ isOpen: true, num: 4 });
-            // only the last person do the global update
-            if (Object.keys(votePlayers)[alivePlayers.length - 1] === me.id) {
-              updates[`games/${id}/votePlayers`] = { isEmpty: true };
-              db.ref().update(updates);
-            }
+          const diePlayer = decideDiePlayer(votePlayers)
+            ? decideDiePlayer(votePlayers)
+            : votePlayers[Object.keys(players)[0]];
+
+          if (me.id === diePlayer) {
+            setModal({ isOpen: true, num: 2 });
+            setMe({ ...me, isAlive: false });
+            setMsg("你已被淘汰，現在開始只能觀賽、不能動作");
           } else {
-            if (me.id === diePlayer) {
-              setModal({ isOpen: true, num: 2 });
-              setMe({ ...me, isAlive: false });
-              setMsg("你已被淘汰，現在開始只能觀賽、不能動作");
-            } else {
-              if (!me.isAlive) {
-                setDiscussion({ isOpen: false, state: -1 });
-                openHelper(
-                  2,
-                  `投票結果：${players[diePlayer].name}已經被淘汰 👋🏼`
-                );
-                return;
-              }
-              setModal({ isOpen: true, num: 3 });
+            if (!me.isAlive) {
+              setDiscussion({ isOpen: false, state: -1 });
+              openHelper(
+                2,
+                `投票結果：${players[diePlayer].name}已經被淘汰 👋🏼`
+              );
+              return;
             }
-            // only the last person do the global update
-            if (Object.keys(votePlayers)[alivePlayers.length - 1] === me.id) {
-              updates[`games/${id}/players/${diePlayer}/isAlive`] = false;
-              updates[`games/${id}/round`] = round + 1;
-              updates[`games/${id}/step`] = 0;
-              db.ref().update(updates);
-            }
-            if (me.isAlive) setMsg("");
+            setModal({ isOpen: true, num: 3 });
           }
+          // only the last person do the global update
+          if (Object.keys(votePlayers)[alivePlayers.length - 1] === me.id) {
+            updates[`games/${id}/players/${diePlayer}/isAlive`] = false;
+            updates[`games/${id}/round`] = round + 1;
+            updates[`games/${id}/step`] = 0;
+            db.ref().update(updates);
+          }
+          if (me.isAlive) setMsg("");
         }
       }
     });
@@ -224,9 +221,9 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
   };
 
   const closeDiscussion = () => {
-    const diePlayer = decideDiePlayer(gameState.votePlayers);
-    console.log(diePlayer);
-    console.log(me);
+    const diePlayer = decideDiePlayer(gameState.votePlayers)
+      ? decideDiePlayer(gameState.votePlayers)
+      : gameState.votePlayers[Object.keys(gameState.players)[0]];
     setDiscussion({ isOpen: false, state: -1 });
     setModal({ isOpen: false, num: -1 });
     if (diePlayer === me.id) {
@@ -242,6 +239,11 @@ const Game = ({ id, gameState, setGameState, styles }: IProps) => {
 
   return (
     <div className={styles.game}>
+      <AnimatePresence>
+        {gameOver.isOpen && (
+          <GameOver gameState={gameState} winner={gameOver.winner} />
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {discussion.isOpen && (
           <Discussion
