@@ -4,7 +4,8 @@
 </p>
 
 ## README
-腸胃淸道夫 is a board game. Through that players are secretly assigned either friendly or naughty roles, the game aims at using a different perspectives to help players understand how daily diet would affect the production of poop 💩  This repository is a web-version of the game for demo. [click here to try it out ](https://card-game-three.vercel.app/) 😆
+腸胃淸道夫 is a board game. By assignning each player with either friendly or naughty role, the game aims at using a different perspectives to help players understand how daily diet would affect the production of poop 💩  This repository is a web-version of the game for demo. [click here to try it out ](https://card-game-three.vercel.app/) 😆
+
 
 ### 👷🏻‍♀️ Built with
 * [NEXT.js](https://nextjs.org/): with image optimization by next/image and depolyed to Vercel
