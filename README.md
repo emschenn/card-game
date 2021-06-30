@@ -1,34 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center">
+  <img src="demo.gif" width="600" >
+  Demo in Gather.Town
+</p>
 
-## Getting Started
+## README
+腸胃淸道夫 is a board game. By assignning each player with either friendly or naughty role, the game aims at using a different perspectives to help players understand how daily diet would affect the production of poop 💩  This repository is a web-version of the game for demo. [click here to try it out ](https://card-game-three.vercel.app/) 😆
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
+### 👷🏻‍♀️ Built with
+* [NEXT.js](https://nextjs.org/): with image optimization by next/image and depolyed to Vercel
+  * [react-card-flip](https://github.com/AaronCCWong/react-card-flip): to create flippable card
+  * [framer-motion](https://www.framer.com/motion/): to create animation 
+* [Firebase - Realtime Database](https://firebase.google.com/products/realtime-database?gclid=Cj0KCQjw5uWGBhCTARIsAL70sLKo0T-JG_SZloOtyD3EsDHui0EcC_WoK2k5U7nyZA6vTMmkzANna6MaAhukEALw_wcB&gclsrc=aw.ds): to create real time interaction
+
+
+### 👩🏻‍💻 Setup
+1. Create a .env file in the root directory: 
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+NEXT_PUBLIC_FIREBASE_API_KEY="your firebase api key"
+NEXT_PUBLIC_FIREBASE_PROJECT_ID="your firebase project id"
+```
+2. Run `npm run dev`✨
