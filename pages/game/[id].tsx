@@ -10,7 +10,6 @@ import { IGameConfig } from "../../interfaces/gameConfig";
 
 // components
 import Game from "../../components/Game";
-import Loader from "../../components/ui/Loader";
 import PoopsLoader from "../../components/ui/PoopsLoader";
 import { AnimatePresence, motion } from "framer-motion";
 

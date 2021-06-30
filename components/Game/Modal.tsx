@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useRouter } from "next/router";
 
 // context
 import { GameContext } from "../../src/context";
@@ -9,14 +8,13 @@ import { GameContext } from "../../src/context";
 import styles from "../../styles/Popup.module.scss";
 
 // utils
-import { decideWhoWins, calculatePooPoint } from "../../utils/gameUtils";
+import { calculatePooPoint } from "../../utils/gameUtils";
 
 /*******************
  * 0: go discussion
  * 1: go vote
  * 2: safe
  * 3: out
- * 4: tie
  *******************/
 
 const backdropAnimation = {
@@ -51,17 +49,6 @@ const AnimateModal = ({
   closeDiscussion,
 }) => {
   const { me } = useContext(GameContext);
-
-  const router = useRouter();
-
-  const showResult = (myCamp, winCamp) => {
-    const winner = winCamp === 0 ? "清道夫勝利" : "搗蛋鬼勝利";
-    const text = myCamp === winCamp ? `恭喜，${winner}` : `歪歪，${winner}`;
-    return text;
-  };
-
-  const point = calculatePooPoint(gameState.playCards);
-
   const Config = {
     0: {
       imgStyle: { top: "-115px", right: "30px" },
@@ -98,18 +85,6 @@ const AnimateModal = ({
       imgSrc: "/img/modal/safe.png",
       onClick: closeModal,
     },
-    5: {
-      imgStyle: { top: "-115px", left: "30px" },
-      buttonText: "遊戲結束",
-      text: showResult(
-        me.camp,
-        decideWhoWins(gameState.pooPoint, gameState.playersCount)
-      ),
-      imgSrc: "/img/modal/safe.png",
-      onClick: () => {
-        router.push(`/`);
-      },
-    },
   };
 
   return (
@@ -130,10 +105,7 @@ const AnimateModal = ({
         <div className={styles.header}>
           <span></span>
           <span></span>
-          <span
-            style={{ background: "#5E493C" }}
-            // onClick={Config[num]?.onClick}
-          ></span>
+          <span style={{ background: "#5E493C" }}></span>
         </div>
         <div className={styles.body}>
           <div

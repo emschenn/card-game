@@ -21,11 +21,6 @@ const SetUpGame = ({ styles }) => {
     if (name) setNameErrorMsg("");
   };
 
-  const onCountInputChange = (e) => {
-    setCount(parseInt(e.target.value));
-    if (count) setCountErrorMsg("");
-  };
-
   const onCreateClick = (e) => {
     e.preventDefault();
     if (!count || !name) {
