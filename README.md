@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="demo.gif" width="600" >
+  <img src="demo.gif" width="600" ><br/>
   Demo in Gather.Town
 </p>
 
