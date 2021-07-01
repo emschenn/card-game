@@ -1,6 +1,10 @@
+  <br/>
+  <br/>
+
 <p align="center">
   <img src="https://i.imgur.com/Kw1jNsx.png" width="500">
-  <br/>
+  <br/>  <br/>
+
 </p>
 腸胃淸道夫 is a board/card game. By assignning each player with either friendly or naughty role, the game aims at using a different perspectives to help players understand how daily diet would affect the production of poop 💩  This repository is a web-version of the game for demo. [click here to try it out](https://card-game-three.vercel.app)
 
